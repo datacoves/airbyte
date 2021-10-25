@@ -145,7 +145,7 @@ public class KubePodProcess extends Process {
 
     return new ContainerBuilder()
         .withName(INIT_CONTAINER_NAME)
-        .withImage("busybox:1.28")
+        .withImage("taqy-docker.artifactrepo.jnj.com/" + "busybox:1.28")
         .withWorkingDir(CONFIG_DIR)
         .withCommand("sh", "-c", initEntrypointStr)
         .withVolumeMounts(mainVolumeMounts)
@@ -177,7 +177,7 @@ public class KubePodProcess extends Process {
 
     final ContainerBuilder containerBuilder = new ContainerBuilder()
         .withName("main")
-        .withImage(image)
+        .withImage("taqy-docker.artifactrepo.jnj.com/" + image)
         .withImagePullPolicy(imagePullPolicy)
         .withCommand("sh", "-c", mainCommand)
         .withWorkingDir(CONFIG_DIR)
@@ -324,21 +324,21 @@ public class KubePodProcess extends Process {
 
     final Container remoteStdin = new ContainerBuilder()
         .withName("remote-stdin")
-        .withImage("alpine/socat:1.7.4.1-r1")
+        .withImage("taqy-docker.artifactrepo.jnj.com/" + "alpine/socat:1.7.4.1-r1")
         .withCommand("sh", "-c", "socat -d -d -d TCP-L:9001 STDOUT > " + STDIN_PIPE_FILE)
         .withVolumeMounts(pipeVolumeMount, terminationVolumeMount)
         .build();
 
     final Container relayStdout = new ContainerBuilder()
         .withName("relay-stdout")
-        .withImage("alpine/socat:1.7.4.1-r1")
+        .withImage("taqy-docker.artifactrepo.jnj.com/" + "alpine/socat:1.7.4.1-r1")
         .withCommand("sh", "-c", String.format("cat %s | socat -d -d -d - TCP:%s:%s", STDOUT_PIPE_FILE, processRunnerHost, stdoutLocalPort))
         .withVolumeMounts(pipeVolumeMount, terminationVolumeMount)
         .build();
 
     final Container relayStderr = new ContainerBuilder()
         .withName("relay-stderr")
-        .withImage("alpine/socat:1.7.4.1-r1")
+        .withImage("taqy-docker.artifactrepo.jnj.com/" + "alpine/socat:1.7.4.1-r1")
         .withCommand("sh", "-c", String.format("cat %s | socat -d -d -d - TCP:%s:%s", STDERR_PIPE_FILE, processRunnerHost, stderrLocalPort))
         .withVolumeMounts(pipeVolumeMount, terminationVolumeMount)
         .build();
@@ -352,7 +352,7 @@ public class KubePodProcess extends Process {
 
     final Container callHeartbeatServer = new ContainerBuilder()
         .withName("call-heartbeat-server")
-        .withImage("curlimages/curl:7.77.0")
+        .withImage("taqy-docker.artifactrepo.jnj.com/" + "curlimages/curl:7.77.0")
         .withCommand("sh")
         .withArgs("-c", heartbeatCommand)
         .withVolumeMounts(terminationVolumeMount)
