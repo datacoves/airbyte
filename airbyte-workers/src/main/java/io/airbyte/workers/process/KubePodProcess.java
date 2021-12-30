@@ -369,7 +369,7 @@ public class KubePodProcess extends Process {
         .endMetadata()
         .withNewSpec()
         .withTolerations(buildPodTolerations(tolerations))
-        .withImagePullSecrets(new LocalObjectReference(imagePullSecret)) // An empty string turns this into a no-op setting.
+        .withImagePullSecrets(new LocalObjectReference("taqy-docker")) // An empty string turns this into a no-op setting.
         .withNodeSelector(nodeSelectors.isEmpty() ? null : nodeSelectors)
         .withRestartPolicy("Never")
         .withInitContainers(init)
